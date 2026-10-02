@@ -7,7 +7,7 @@ public class Series extends Content{
     private int year;
     private ArrayList<Episode> episodes;
     
-
+    
     public Series(String title, int year){
         super(title);
         this.year=year;
@@ -30,7 +30,13 @@ public class Series extends Content{
    */
    @Override
    public int rating() throws NeoFlixException{
-       return 0;
+       if (episodes.isEmpty()) throw new NeoFlixException(NeoFlixException.CONTENT_EMPTY);
+       int totalRating = 0;
+       for (Episode e : episodes){
+           int rating = e.rating();
+           totalRating += rating;
+        }
+       return totalRating/episodes.size();
    }
     
  
@@ -41,13 +47,36 @@ public class Series extends Content{
    */
 
    public int rating(int default_) throws NeoFlixException{
-       return 0;
+       int totalRating = 0;
+       int cont = 0;
+       for (Episode e : episodes){
+           int rating;
+           try{
+               rating = e.rating();
+               cont ++;
+           } 
+           catch(NeoFlixException ex) {
+               String neo = NeoFlixException.VALUE_UNKNOWN;
+               String exc = ex.getMessage();
+               if(NeoFlixException.VALUE_UNKNOWN.equals(ex.getMessage())){
+                   rating = default_;
+                   cont ++;
+               }
+               else{
+                   rating = 0;
+               }
+           }
+           totalRating += rating;
+        }
+       return totalRating/cont;
    }
  
    //If an episode has no rating, use the average of the previous episodes or of all episodes, depending on the value of the previous parameter.
    //Throw CONTENT_EMPTY and VALUE_UNKNOWN if either of these cases occurs.
    public int rating(boolean previous) throws NeoFlixException{
-        return 0;
+       if (episodes.isEmpty()) throw new NeoFlixException(NeoFlixException.CONTENT_EMPTY); 
+       
+       return 0;
    }
     
    

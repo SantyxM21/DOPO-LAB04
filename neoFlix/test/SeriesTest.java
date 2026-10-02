@@ -24,7 +24,7 @@ public class SeriesTest{
         } catch (NeoFlixException e){
             fail("Threw a exception "+e.getMessage());
         }    
-    }    
+    }     
 
     
     @Test
@@ -72,5 +72,14 @@ public class SeriesTest{
     }     
     
 
+    @Test
+    public void shouldUseTheDefaultRating() throws domain.NeoFlixException{
+        Series s = new Series("The Neo Ninja", 2020);
+        s.addEpisode(new Episode("The Hidden Village",s,120,199, 100, 1000));
+        s.addEpisode(new Episode("The First Mission",s,140,126,50,540));
+        s.addEpisode(new Episode("The Rival",s,120,199,0,0));
+        s.addEpisode(new Episode("The Tournament",s,180, 162, 10, 40));
+        assertEquals(8, s.rating(10));
+    }
     
 }

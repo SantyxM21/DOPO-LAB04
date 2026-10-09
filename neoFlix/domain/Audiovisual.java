@@ -16,7 +16,7 @@ public abstract class Audiovisual extends Content{
         this.sumVotes=sumVotes;
     }
     
- 
+
     public Audiovisual(String title){
         this(title,0,0,0,0);
     }
@@ -24,16 +24,17 @@ public abstract class Audiovisual extends Content{
     
     @Override
     public int popularity() throws NeoFlixException{
-       if (attempts == 0) throw new NeoFlixException(NeoFlixException.VALUE_UNKNOWN);
-       return (completed*100)/attempts;
+        if (attempts == 0) throw new NeoFlixException(NeoFlixException.VALUE_UNKNOWN);
+        if (completed > attempts) throw new NeoFlixException(NeoFlixException.DATA_ERROR);
+        return (completed*100)/attempts;
     }    
     
     
     @Override
     public int rating() throws NeoFlixException{
-       if (votes == 0) throw new NeoFlixException(NeoFlixException.VALUE_UNKNOWN);
-       if (sumVotes>votes*10) throw new NeoFlixException(NeoFlixException.DATA_ERROR);
-       return sumVotes/votes;
+        if (votes == 0) throw new NeoFlixException(NeoFlixException.VALUE_UNKNOWN);
+        if (sumVotes>votes*10) throw new NeoFlixException(NeoFlixException.DATA_ERROR);
+        return sumVotes/votes;
     }  
     
     

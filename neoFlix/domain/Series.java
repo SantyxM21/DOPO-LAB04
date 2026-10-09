@@ -1,13 +1,12 @@
 package domain;  
- 
+
 import java.util.ArrayList;
 
 public class Series extends Content{
-   
     private int year;
     private ArrayList<Episode> episodes;
     
-    
+
     public Series(String title, int year){
         super(title);
         this.year=year;
@@ -15,74 +14,97 @@ public class Series extends Content{
     }
 
 
-  
+
     public void addEpisode(Episode e){
         episodes.add(e);
     }
-       
-    
-   /**
-   * Returns the calculated rating
-   * @return
-   * @throws NeoFlixException, CONTENT_EMPTY if the series has no episodes
-   *                         , VALUE_UNKNOWN if the rating for any episode is unknown
-   *                         , DATA_ERROR if the rating for any episode cannot be calculated due to a data error
-   */
-   @Override
-   public int rating() throws NeoFlixException{
-       if (episodes.isEmpty()) throw new NeoFlixException(NeoFlixException.CONTENT_EMPTY);
-       int totalRating = 0;
-       for (Episode e : episodes){
-           int rating = e.rating();
-           totalRating += rating;
-        }
-       return totalRating/episodes.size();
-   }
-    
- 
-   /**
-   * Returns the calculated rating, using the default value for episodes with an unknown rating and ignoring those with errors.
-   * @return
-   * @throws NeoFlixException, UNKNOWN_VALUE if the rating cannot be calculated.
-   */
 
-   public int rating(int default_) throws NeoFlixException{
-       int totalRating = 0;
-       int cont = 0;
-       for (Episode e : episodes){
-           int rating;
-           try{
-               rating = e.rating();
-               cont ++;
-           } 
-           catch(NeoFlixException ex) {
-               String neo = NeoFlixException.VALUE_UNKNOWN;
-               String exc = ex.getMessage();
-               if(NeoFlixException.VALUE_UNKNOWN.equals(ex.getMessage())){
-                   rating = default_;
-                   cont ++;
-               }
-               else{
-                   rating = 0;
-               }
-           }
-           totalRating += rating;
-        }
-       return totalRating/cont;
-   }
- 
-   //If an episode has no rating, use the average of the previous episodes or of all episodes, depending on the value of the previous parameter.
-   //Throw CONTENT_EMPTY and VALUE_UNKNOWN if either of these cases occurs.
-   public int rating(boolean previous) throws NeoFlixException{
-       if (episodes.isEmpty()) throw new NeoFlixException(NeoFlixException.CONTENT_EMPTY); 
-       
-       return 0;
-   }
     
-   
-   public int popularity() throws NeoFlixException{
-       return 0;
-   }
+    /**
+    * Returns the calculated rating
+    * @return the average of the ratings of all episodes
+    * @throws NeoFlixException, CONTENT_EMPTY if the series has no episodes
+    *                         , VALUE_UNKNOWN if the rating for any episode is unknown
+    *                         , DATA_ERROR if the rating for any episode cannot be calculated due to a data error
+    */
+    @Override
+    public int rating() throws NeoFlixException{
+        if(episodes.isEmpty()) throw new NeoFlixException(NeoFlixException.CONTENT_EMPTY);
+        int total = 0;
+        for(Episode ep: episodes){
+            total += ep.rating();
+        }
+        return total/episodes.size();
+    }
+    
+
+    /**
+    * Returns the calculated rating, using the default value for episodes with an unknown rating and ignoring those with errors.
+    * @return the average of the ratings of all episodes, using the default value for episodes with an unknown rating and ignoring those with errors
+    * @throws NeoFlixException, UNKNOWN_VALUE if the rating cannot be calculated.
+    */
+    public int rating(int default_) throws NeoFlixException{
+        int cont = 0;
+        int total = 0;
+        
+        for(Episode ep : episodes){
+            try{
+                total += ep.rating();
+                cont++;
+            }catch(NeoFlixException e){
+                if(NeoFlixException.VALUE_UNKNOWN.equals(e.getMessage())){
+                    total += default_;
+                    cont++;
+                }
+            }
+        }
+        if (cont == 0) throw new NeoFlixException(NeoFlixException.UNKNOWN_VALUE);
+        return total/cont;
+    }
+
+    //If an episode has no rating, use the average of the previous episodes or of all episodes, depending on the value of the previous parameter.
+    //Throw CONTENT_EMPTY and VALUE_UNKNOWN if either of these cases occurs.
+    /**
+     * Returns the calculated rating for the series, using the average of previous episodes or all episodes depending on the 'previous' parameter.
+     * @param previous If true, use the average of previous episodes for episodes with unknown ratings. If false, use the average of all episodes.
+     * @return the average of the ratings of all episodes
+     * @throws NeoFlixException 
+     */
+    public int rating(boolean previous) throws NeoFlixException{
+        if(episodes.isEmpty()) throw new NeoFlixException(NeoFlixException.CONTENT_EMPTY);
+        int cont = 0;
+        int total = 0;
+        
+        for(Episode ep : episodes){
+            try{
+                total += ep.rating();
+                cont++;
+            }catch(NeoFlixException e){
+                if(previous){
+                    if(cont == 0) throw new NeoFlixException(NeoFlixException.VALUE_UNKNOWN);
+                    total += (int) total/cont;
+                    cont++;
+                }else{
+                    // Por implementar
+                }
+            }
+        }
+        return total/cont;
+    }
+    
+    /**    (non-Javadoc)
+     * Returns the calculated popularity for the series, which is the average of the popularity of all episodes.
+     * @return the average of the popularity of all episodes
+     * @throws NeoFlixException, CONTENT_EMPTY if the series has no episodes
+     */
+    public int popularity() throws NeoFlixException{
+        if(episodes.isEmpty()) throw new NeoFlixException(NeoFlixException.CONTENT_EMPTY);
+        int total = 0;
+        for(Episode ep: episodes){
+            total += ep.popularity();
+        }
+        return total/episodes.size();
+    }
     
     
     @Override

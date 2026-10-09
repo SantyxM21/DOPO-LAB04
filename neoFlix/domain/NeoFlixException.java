@@ -1,20 +1,20 @@
 package domain;
 
+
 /**
  * Write a description of class NeoFlixException here.
- *
- * @author (your name)
+ * 
+ * @author (your name) 
  * @version (a version number or a date)
  */
 public class NeoFlixException extends Exception{
-    public static final String TO_BE_IMPLEMENTED = "imple";
-    public static final String VALUE_UNKNOWN = "The value is unknown HOL.A";
-    public static final String DATA_ERROR = "data";
-    public static final String CONTENT_EMPTY = "The serie has no episodes";
+    public static final String TO_BE_IMPLEMENTED = "Por ser implementada";
+    public static final String VALUE_UNKNOWN = "Valor desconocido";
+    public static final String DATA_ERROR = "Error de datos";
+    public static final String CONTENT_EMPTY = "No hay contenido";
+    public static final String UNKNOWN_VALUE = "No fue posible el calculo";
     
     public NeoFlixException(String message){
         super(message);
     }
-    
-    
 }

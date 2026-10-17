@@ -9,8 +9,8 @@ import org.junit.Test;
 
 
 public class SeriesTest{
-   
- 
+
+
     @Test
     public void shouldCalculateSeriessRating(){                              
         Series s = new Series("The Neo Ninja", 2020);
@@ -75,7 +75,7 @@ public class SeriesTest{
     
     
     @Test
-    public void should1(){
+    public void shouldCalculateRatingWithDefaultWhenAllEpisodesAreKnown(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,1000));
         s.addEpisode(new Episode("The First Mission",s,140,126,50,400));
@@ -90,7 +90,7 @@ public class SeriesTest{
     }
     
     @Test
-    public void should2(){
+    public void shouldUseDefaultValueForEpisodesWithUnknownRating(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,1000));
         s.addEpisode(new Episode("The First Mission",s,140,126,50,400));
@@ -105,7 +105,7 @@ public class SeriesTest{
     }
     
     @Test
-    public void should3(){
+    public void shouldIgnoreEpisodesWithInvalidRatingDataUsingDefault(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,1000));
         s.addEpisode(new Episode("The First Mission",s,140,126,50,540));
@@ -120,7 +120,7 @@ public class SeriesTest{
     }
 
     @Test
-    public void shouldCombine(){
+    public void shouldUseDefaultAndIgnoreErrorsWhenCombined(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,1000));
         s.addEpisode(new Episode("The First Mission",s,140,126,50,540));
@@ -135,7 +135,7 @@ public class SeriesTest{
     }    
     
     @Test
-    public void should4(){
+    public void shouldThrowExceptionIfNoEpisodeRatingCanBeCalculatedWithDefault(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,10000));
         s.addEpisode(new Episode("The First Mission",s,140,126,50,540));
@@ -153,7 +153,7 @@ public class SeriesTest{
     
     
     @Test
-    public void should5(){
+    public void shouldCalculateRatingWithPreviousWhenAllEpisodesAreKnown(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,1000));
         s.addEpisode(new Episode("The First Mission",s,140,126,50,400));
@@ -168,7 +168,7 @@ public class SeriesTest{
     }   
     
     @Test
-    public void should6(){
+    public void shouldUsePreviousAverageForEpisodesWithUnknownRating(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,1000));
         s.addEpisode(new Episode("The First Mission",s,140,126,50,400));
@@ -183,7 +183,7 @@ public class SeriesTest{
     }   
     
     @Test
-    public void should7(){
+    public void shouldUsePreviousAverageForEpisodesWithInvalidRatingData(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,1000));
         s.addEpisode(new Episode("The First Mission",s,140,126,50,540));
@@ -198,7 +198,7 @@ public class SeriesTest{
     }
     
     @Test
-    public void shouldCombine2(){
+    public void shouldUsePreviousAverageForUnknownAndInvalidEpisodesCombined(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,1000));
         s.addEpisode(new Episode("The First Mission",s,140,126,50,540));
@@ -213,7 +213,7 @@ public class SeriesTest{
     }   
     
     @Test
-    public void should8(){
+    public void shouldThrowExceptionIfFirstEpisodeRatingIsUnknownUsingPrevious(){
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Final Battle",s, 200, 190, 0, 0));
         s.addEpisode(new Episode("The Hidden Village",s,120,199,100,1000));
@@ -233,7 +233,7 @@ public class SeriesTest{
     
     
     @Test
-    public void should9(){                              
+    public void shouldCalculateSeriesPopularity(){                              
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,199,120,50,430));
         s.addEpisode(new Episode("The First Mission",s,140,126,60,510));
@@ -248,7 +248,7 @@ public class SeriesTest{
     }  
     
     @Test
-    public void should10(){                              
+    public void shouldThrowExceptionIfAEpisodeContainsInvalidPopularityData(){                              
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,199,120,50,430));
         s.addEpisode(new Episode("The First Mission",s,140,126,60,510));
@@ -256,15 +256,15 @@ public class SeriesTest{
         s.addEpisode(new Episode("The Tournament",s,180, 162, 90, 810));
         s.addEpisode(new Episode("The Final Battle",s, 200, 1900, 120, 1080));
         try {
-           int value = s.popularity();
-           fail("Did not throw exception");
+            int value = s.popularity();
+            fail("Did not throw exception");
         } catch (NeoFlixException e){
             assertEquals(NeoFlixException.DATA_ERROR, e.getMessage());
         }    
     }     
     
     @Test
-    public void should11(){                              
+    public void shouldThrowExceptionWhenAnEpisodePopularityIsUnknown(){                              
         Series s = new Series("The Neo Ninja", 2020);
         s.addEpisode(new Episode("The Hidden Village",s,199,120,50,430));
         s.addEpisode(new Episode("The First Mission",s,140,126,60,510));
@@ -272,8 +272,8 @@ public class SeriesTest{
         s.addEpisode(new Episode("The Tournament",s,180, 162, 90, 810));
         s.addEpisode(new Episode("The Final Battle",s, 200, 190, 120, 1080));
         try {
-           int value = s.popularity();
-           fail("Did not throw exception");
+            int value = s.popularity();
+            fail("Did not throw exception");
         } catch (NeoFlixException e){
             assertEquals(NeoFlixException.VALUE_UNKNOWN, e.getMessage());
         }    

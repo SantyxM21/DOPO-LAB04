@@ -16,7 +16,7 @@ public class NeoFlix{
     /**
      * Create a NeoFlix
      */
-    public NeoFlix(){
+    public NeoFlix()  {
         contents = new ArrayList<Content>();
         episodes = new TreeMap<String,Episode>();
         addSomeSeries();
@@ -27,26 +27,26 @@ public class NeoFlix{
     * Adds sample series and episodes to NeoFlix.
     */
     private void addSomeSeries(){
-        
-        String [][] episodes= { {"The Hidden Village","199","120","50","430"},
+        try {String [][] episodes= { {"The Hidden Village","199","120","50","430"},
                                 {"The First Mission","126","140","60","510"},
                                 {"The Rival","199","120","50","430"},
                                 {"The Tournament","162","180", "90", "810"},
                                 {"The Final Battle","190", "200", "120", "1080"}};
-        StringBuffer titles=new StringBuffer();
-        for (String [] e : episodes){
-            titles.append(e[0]+"\n");
+            StringBuffer titles=new StringBuffer();
+            for (String [] e : episodes){
+                titles.append(e[0]+"\n");
+            }
+            
+            for (String [] e: episodes){
+                addEpisode(e[0],"?", e[1],e[2],e[3],e[4]);
+            }
+            String [][] series = {{"The Neo Ninja", "2020", titles.toString()}};
+            for (String [] s: series){
+                addSeries(s[0],s[1],s[2]);
+            }
+        } catch (NeoFlixException e){
+            //revisar que iria aca;
         }
-        
-        for (String [] e: episodes){
-            addEpisode(e[0],"?", e[1],e[2],e[3],e[4]);
-        }
-        String [][] series = {{"The Neo Ninja", "2020", titles.toString()}};
-        for (String [] s: series){
-            addSeries(s[0],s[1],s[2]);
-        }
-
-
     }
 
 
@@ -73,11 +73,19 @@ public class NeoFlix{
     * @param votes
     * @param sumVotes
     */
-    public void addEpisode(String title, String series, String attempts, String completed, String votes, String sumVotes){ 
-        Series s = (Series) consult(series);
-        Episode e=new Episode(title,s, Integer.parseInt(attempts), Integer.parseInt(completed), Integer.parseInt(votes), Integer.parseInt(sumVotes));
-        contents.add(e);
-        episodes.put(title.toUpperCase(),e); 
+    public void addEpisode(String title, String series, String attempts, String completed, String votes, String sumVotes) throws NeoFlixException{ 
+        if (consult(title) != null) throw new NeoFlixException(NeoFlixException.NAME_ALREADY_EXISTS);
+        try{
+            Series s = (Series) consult(series);
+            Episode e=new Episode(title,s, Integer.parseInt(attempts), Integer.parseInt(completed), Integer.parseInt(votes), Integer.parseInt(sumVotes));
+            if (Integer.parseInt(completed) > Integer.parseInt(attempts) || Integer.parseInt(sumVotes) > Integer.parseInt(votes)*10 ){
+                throw new NeoFlixException(NeoFlixException.UNEXPECTED_VALUE);
+            }
+            contents.add(e);
+            episodes.put(title.toUpperCase(),e);
+        } catch (NumberFormatException e){
+            throw new NeoFlixException(NeoFlixException.NOT_NUMERIC);
+        }
     }
     
     
@@ -87,13 +95,19 @@ public class NeoFlix{
      * @param year
      * @param theEpisodes the titles of the episodes separated by newlines
     */
-    public void addSeries(String title, String year, String theEpisodes){ 
-        Series s = new Series(title,Integer.parseInt(year));
-        String [] aEpisodes= theEpisodes.split("\n");
-        for (String te : aEpisodes){
-            s.addEpisode(episodes.get(te.toUpperCase()));
+    public void addSeries(String title, String year, String theEpisodes) throws NeoFlixException{ 
+        if (consult(title) != null) throw new NeoFlixException(NeoFlixException.NAME_ALREADY_EXISTS);
+        try{
+            Series s = new Series(title,Integer.parseInt(year));
+            String [] aEpisodes= theEpisodes.split("\n");
+            for (String te : aEpisodes){
+                s.addEpisode(episodes.get(te.toUpperCase()));
+            }
+            contents.add(s);
+        } catch(NumberFormatException e){
+            throw new NeoFlixException(NeoFlixException.NOT_NUMERIC);
         }
-        contents.add(s);
+        
     }
 
     /**
@@ -160,5 +174,4 @@ public class NeoFlix{
     public int numberContents(){
         return contents.size();
     }
-
 }

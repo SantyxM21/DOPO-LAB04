@@ -220,10 +220,15 @@ public class NeoFlixGUI extends JFrame{
     }
     
     private void  actionAdd(){
-        if (episodes.getText().trim().equals("")){
-            neoFlix.addEpisode (title.getText(), "", atttemps.getText(), completed.getText(),votes.getText(),sumVotes.getText());
-        }else{ 
-            neoFlix.addSeries (title.getText(),year.getText(),episodes.getText());
+        try{
+            if (episodes.getText().trim().equals("")){
+                neoFlix.addEpisode (title.getText(), "", atttemps.getText(), completed.getText(),votes.getText(),sumVotes.getText());
+            }else{ 
+                neoFlix.addSeries (title.getText(),year.getText(),episodes.getText());
+            }
+            JOptionPane.showMessageDialog(this , "Agregado con exito!");
+        } catch (NeoFlixException e){
+            JOptionPane.showMessageDialog(this , e.getMessage());//Se le muestra al usuario que no fue posible
         }
     }
 

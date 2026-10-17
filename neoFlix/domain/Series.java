@@ -112,10 +112,9 @@ public class Series extends Content{
         StringBuffer answer=new StringBuffer();
         answer.append(title+": "+year+ ( withIndicators ? " ( " +popularity()+" - "+ rating()+" )":""));
         for(Episode e: episodes) {
+            if (e == null) throw new NeoFlixException(NeoFlixException.CONTENT_EMPTY);
             answer.append("\n\t"+(e.data(withIndicators)));
         }
         return answer.toString();
     } 
-    
-
 }

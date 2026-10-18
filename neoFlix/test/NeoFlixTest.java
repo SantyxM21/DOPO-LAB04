@@ -30,7 +30,7 @@ public class NeoFlixTest{
      * Called before every test case method.
      */
     @BeforeEach
-    public void setUp(){
+    public void setUp() throws NeoFlixException {
         nf = new NeoFlix();
         initialSize = nf.numberContents();
     }
@@ -139,6 +139,18 @@ public class NeoFlixTest{
         }
     }
     
+    /* ---------- Busqueda ----------*/
+    @Test
+    public void shouldSearchForExistingContent(){
+        try {
+            nf.addEpisode("prueba", "?", "1", "1", "1", "1");
+            String responSearch = nf.search("prueba");
+            assertEquals("1 elementos\n>prueba ( 100 - 1 ) \n", responSearch);
+        } catch (NeoFlixException e){
+            fail("Threw a exception " + e.getMessage());
+        }
+    }
+
     /**
      * Tears down the test fixture.
      *

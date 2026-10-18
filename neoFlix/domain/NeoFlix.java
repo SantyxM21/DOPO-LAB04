@@ -16,7 +16,7 @@ public class NeoFlix{
     /**
      * Create a NeoFlix
      */
-    public NeoFlix()  {
+    public NeoFlix() throws NeoFlixException{
         contents = new ArrayList<Content>();
         episodes = new TreeMap<String,Episode>();
         addSomeSeries();
@@ -26,28 +26,25 @@ public class NeoFlix{
     /**
     * Adds sample series and episodes to NeoFlix.
     */
-    private void addSomeSeries(){
-        try { // se cambiaron los valores de los episodios para que no generen errror de validacion.
-            String [][] episodes= { {"The Hidden Village","199","120","50","430"},
-                                {"The First Mission","140","126","60","510"}, // original 126,140,60,510
-                                {"The Secret Weapon","160","150","80","720"}, // original 150,160,80,720
-                                {"The Rival","199","120","50","430"},
-                                {"The Tournament","180","162", "90", "810"}, // original 162,180,90,810
-                                {"The Final Battle","200", "190", "120", "1080"}}; // original 190,200,120,1080
-            StringBuffer titles=new StringBuffer();
-            for (String [] e : episodes){
-                titles.append(e[0]+"\n");
-            }
-            
-            for (String [] e: episodes){
-                addEpisode(e[0],"?", e[1],e[2],e[3],e[4]);
-            }
-            String [][] series = {{"The Neo Ninja", "2020", titles.toString()}};
-            for (String [] s: series){
-                addSeries(s[0],s[1],s[2]);
-            }
-        } catch (NeoFlixException e){
-            //revisar que iria aca;
+    private void addSomeSeries() throws NeoFlixException{
+        // se cambiaron los valores de los episodios para que no generen errror de validacion.
+        String [][] episodes= { {"The Hidden Village","199","120","50","430"},
+                            {"The First Mission","140","126","60","510"}, // original 126,140,60,510
+                            {"The Secret Weapon","160","150","80","720"}, // original 150,160,80,720
+                            {"The Rival","199","120","50","430"},
+                            {"The Tournament","180","162", "90", "810"}, // original 162,180,90,810
+                            {"The Final Battle","200", "190", "120", "1080"}}; // original 190,200,120,1080
+        StringBuffer titles=new StringBuffer();
+        for (String [] e : episodes){
+            titles.append(e[0]+"\n");
+        }
+        
+        for (String [] e: episodes){
+            addEpisode(e[0],"?", e[1],e[2],e[3],e[4]);
+        }
+        String [][] series = {{"The Neo Ninja", "2020", titles.toString()}};
+        for (String [] s: series){
+            addSeries(s[0],s[1],s[2]);
         }
     }
 

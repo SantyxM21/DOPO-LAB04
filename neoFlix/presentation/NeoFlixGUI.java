@@ -40,7 +40,7 @@ public class NeoFlixGUI extends JFrame{
     private JTextArea textResults;
     
     
-    private NeoFlixGUI(){
+    private NeoFlixGUI() throws NeoFlixException{
         neoFlix=new NeoFlix();
         prepareElements();
         prepareActions();
@@ -233,15 +233,20 @@ public class NeoFlixGUI extends JFrame{
     }
 
     private void actionSearch(){
-        String patronBusqueda=textSearch.getText();
-        String answer = "";
-        if(patronBusqueda.length() > 0) {
-            answer = neoFlix.search(patronBusqueda);
+        try{
+            String patronBusqueda=textSearch.getText();
+            String answer = "";
+            if(patronBusqueda.length() > 0) {
+                answer = neoFlix.search(patronBusqueda);
+            }
+            textResults.setText(answer);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this , "Ocurrio un error inseperado");
+            Log.record(e);
         }
-        textResults.setText(answer);
     } 
     
-    public static void main(String args[]){
+    public static void main(String args[]) throws NeoFlixException {
         NeoFlixGUI gui=new NeoFlixGUI();
         gui.setVisible(true);
     }    

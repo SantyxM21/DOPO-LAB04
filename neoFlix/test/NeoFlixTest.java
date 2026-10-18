@@ -2,10 +2,10 @@ package test;
 
 
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import domain.*;
 
@@ -29,7 +29,7 @@ public class NeoFlixTest{
      *
      * Called before every test case method.
      */
-    @BeforeEach
+    @Before
     public void setUp() throws NeoFlixException {
         nf = new NeoFlix();
         initialSize = nf.numberContents();
@@ -156,7 +156,7 @@ public class NeoFlixTest{
      *
      * Called after every test case method.
      */
-    @AfterEach
+    @After
     public void tearDown()
     {
     }

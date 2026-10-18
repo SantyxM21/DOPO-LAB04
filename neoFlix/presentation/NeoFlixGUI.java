@@ -216,7 +216,12 @@ public class NeoFlixGUI extends JFrame{
 
     
     private void actionList(){
-        textDetails.setText(neoFlix.toString());
+        try{
+            textDetails.setText(neoFlix.toString());
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this , "Ocurrio un error inesperado");
+            Log.record(e);
+        }
     }
     
     private void  actionAdd(){
@@ -229,6 +234,9 @@ public class NeoFlixGUI extends JFrame{
             JOptionPane.showMessageDialog(this , "Agregado con exito!");
         } catch (NeoFlixException e){
             JOptionPane.showMessageDialog(this , e.getMessage());//Se le muestra al usuario que no fue posible
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(this , "Ocurrio un error inesperado");
+            Log.record(e);
         }
     }
 

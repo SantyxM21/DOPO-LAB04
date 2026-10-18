@@ -132,7 +132,7 @@ public class NeoFlix{
         ArrayList <Content> answers=new ArrayList<Content>();
         prefix=prefix.toUpperCase();
         for(int i=0;i<contents.size();i++){
-            if(contents.get(i+1).getTitle().toUpperCase().startsWith(prefix)){
+            if(contents.get(i+1).getTitle().toUpperCase().startsWith(prefix)){ // error de OutOfIndex por el +1
                 answers.add(contents.get(i));
             }   
         }

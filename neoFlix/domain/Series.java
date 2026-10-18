@@ -100,13 +100,22 @@ public class Series extends Content{
     public int popularity() throws NeoFlixException{
         if(episodes.isEmpty()) throw new NeoFlixException(NeoFlixException.CONTENT_EMPTY);
         int total = 0;
-        for(Episode ep: episodes){
-            total += ep.popularity();
+        try{
+            for(Episode ep: episodes){
+                total += ep.popularity();
+            }
+        }catch(NeoFlixException e){
+            throw new NeoFlixException(NeoFlixException.UNKNOWN_VALUE);
         }
         return total/episodes.size();
     }
     
-    
+    /**    (non-Javadoc)
+     * Returns the data of the series, including its title, year, and the data of all its episodes.
+     * @param withIndicators If true, include the popularity and rating indicators in the data.
+     * @return the data of the series
+     * @throws NeoFlixException, CONTENT_EMPTY if the series has no episodes
+     */
     @Override
     public String data(boolean withIndicators) throws NeoFlixException{
         StringBuffer answer=new StringBuffer();

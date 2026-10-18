@@ -259,7 +259,7 @@ public class SeriesTest{
             int value = s.popularity();
             fail("Did not throw exception");
         } catch (NeoFlixException e){
-            assertEquals(NeoFlixException.DATA_ERROR, e.getMessage());
+            assertEquals(NeoFlixException.UNKNOWN_VALUE, e.getMessage());
         }    
     }     
     
@@ -275,7 +275,7 @@ public class SeriesTest{
             int value = s.popularity();
             fail("Did not throw exception");
         } catch (NeoFlixException e){
-            assertEquals(NeoFlixException.VALUE_UNKNOWN, e.getMessage());
+            assertEquals(NeoFlixException.UNKNOWN_VALUE, e.getMessage());
         }    
     }
 }

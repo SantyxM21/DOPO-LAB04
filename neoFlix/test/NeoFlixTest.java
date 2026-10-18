@@ -35,6 +35,44 @@ public class NeoFlixTest{
         initialSize = nf.numberContents();
     }
 
+    /* ---------- Listar ----------*/
+    @Test
+    public void shouldListTheEpisodes(){
+        try {
+            nf.addEpisode("Episodio 1", "?", "100", "80", "10", "70");
+            String expected = "8 elementos\n"
+                            + ">The Hidden Village\n"
+                            + ">The First Mission\n"
+                            + ">The Secret Weapon\n"
+                            + ">The Rival\n"
+                            + ">The Tournament\n"
+                            + ">The Final Battle\n"
+                            + ">The Neo Ninja: 2020"
+                            + "\n\tThe Hidden Village"
+                            + "\n\tThe First Mission"
+                            + "\n\tThe Secret Weapon"
+                            + "\n\tThe Rival"
+                            + "\n\tThe Tournament"
+                            + "\n\tThe Final Battle\n"
+                            + ">Episodio 1\n";
+            assertEquals(expected, nf.toString());
+        } catch (NeoFlixException e){
+            fail("Threw a exception " + e.getMessage());
+        }
+    }
+
+    /* ---------- Aceptacion ----------*/
+    @Test
+    public void acceptanceTestShouldAddASeriesAndFindIt(){
+        try {
+            nf.addEpisode("Pilot", "", "100", "80", "10", "70");
+            nf.addSeries("Mi Serie", "2026", "Pilot");
+            assertEquals("Mi Serie: 2026 ( 80 - 7 )\n\tPilot ( 80 - 7 )", nf.consult("Mi Serie").data(true));
+        } catch (NeoFlixException e){
+            fail("Threw a exception " + e.getMessage());
+        }
+    }
+
     /* ---------- ejecuciones normales ---------- */
 
     @Test
